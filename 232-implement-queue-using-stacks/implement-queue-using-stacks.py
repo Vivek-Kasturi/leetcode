@@ -1,20 +1,36 @@
 class MyQueue:
 
     def __init__(self):
-        self.stack1=[]
-        self.stack2=[]
+        self.stack = []      # just one stack for brute force
+
     def push(self, x: int) -> None:
-        self.stack1.append(x)
+        self.stack.append(x)
+
     def pop(self) -> int:
-        if not self.stack2:
-            while self.stack1:
-                self.stack2.append(self.stack1.pop())
-        return self.stack2.pop()
+        # brute force: rebuild queue order every time
+        temp = []
+        while self.stack:
+            temp.append(self.stack.pop())
+
+        front = temp.pop()   # this is the queue front
+
+        # rebuild original order
+        while temp:
+            self.stack.append(temp.pop())
+
+        return front
+
     def peek(self) -> int:
-        if not self.stack2:
-            while self.stack1:
-                self.stack2.append(self.stack1.pop())
-        return self.stack2[-1]
+        temp = []
+        while self.stack:
+            temp.append(self.stack.pop())
+
+        front = temp[-1]     # peek without removing
+
+        while temp:
+            self.stack.append(temp.pop())
+
+        return front
+
     def empty(self) -> bool:
-        return max(len(self.stack1), len(self.stack2))==0
-        
+        return len(self.stack) == 0
